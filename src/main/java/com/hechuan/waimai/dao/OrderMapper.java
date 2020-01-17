@@ -1,6 +1,7 @@
 package com.hechuan.waimai.dao;
 
-import com.neuedu.entity.Order;
+import com.hechuan.waimai.dto.Order;
+import com.hechuan.waimai.dto.OrderRequest;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -16,4 +17,7 @@ public interface OrderMapper {
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
+
+
+    void queryOrderList(OrderRequest order);
 }

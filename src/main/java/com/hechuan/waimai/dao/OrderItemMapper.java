@@ -1,6 +1,7 @@
 package com.hechuan.waimai.dao;
 
-import com.neuedu.entity.OrderItem;
+
+import com.hechuan.waimai.dto.OrderItem;
 import org.springframework.stereotype.Repository;
 
 @Repository

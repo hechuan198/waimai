@@ -24,16 +24,16 @@ public class Order {
 
     private Integer status;
 
-    private Date paymentTime;
+    private String paymentTime;
 
-    private Date sendTime;
+    private String sendTime;
 
-    private Date endTime;
+    private String endTime;
 
-    private Date closeTime;
+    private String closeTime;
 
-    private Date createTime;
+    private String createTime;
 
-    private Date updateTime;
+    private String updateTime;
 
 }

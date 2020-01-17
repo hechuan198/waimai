@@ -1,6 +1,7 @@
 package com.hechuan.waimai.dao;
 
-import com.neuedu.entity.Address;
+
+import com.hechuan.waimai.dto.Address;
 import org.springframework.stereotype.Repository;
 
 @Repository

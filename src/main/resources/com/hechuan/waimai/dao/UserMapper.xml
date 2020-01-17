@@ -28,7 +28,7 @@
     delete from w_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.neuedu.entity.User">
+  <insert id="insert" parameterType="com.hechuan.waimai.dao.UserMapper">
     insert into w_user (id, username, password, 
       email, phone, question, 
       answer, role, create_time, 
@@ -38,7 +38,7 @@
       #{answer,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, 
       #{updateTime,jdbcType=DATE})
   </insert>
-  <insert id="insertSelective" parameterType="com.neuedu.entity.User">
+  <insert id="insertSelective" parameterType="com.hechuan.waimai.dao.UserMapper">
     insert into w_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -105,7 +105,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.neuedu.entity.User">
+  <update id="updateByPrimaryKeySelective" parameterType="com.hechuan.waimai.dao.UserMapper">
     update w_user
     <set>
       <if test="username != null">
@@ -138,7 +138,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.neuedu.entity.User">
+  <update id="updateByPrimaryKey" parameterType="com.hechuan.waimai.dao.UserMapper">
     update w_user
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},

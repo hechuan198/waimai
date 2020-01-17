@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hechuan.waimai.dao.ProductMapper">
-    <resultMap id="BaseResultMap" type="com.neuedu.entity.Product">
+    <resultMap id="BaseResultMap" type="com.hechuan.waimai.dto.Product">
         <constructor>
             <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="category_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
@@ -11,15 +11,15 @@
             <arg column="detail" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="price" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
             <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="create_time" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="update_time" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
     id, category_id, name, subtitle, main_image, detail, price, status, date_format(create_time,'%Y-%m-%d %H:%i:%s') create_time,
     date_format(update_time,'%Y-%m-%d %H:%m:%s') update_time
   </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultType="com.hechuan.waimai.dto.Product" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from w_product
@@ -29,7 +29,7 @@
     delete from w_product
     where id = #{id,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.neuedu.entity.Product">
+    <insert id="insert" parameterType="com.hechuan.waimai.dto.ProductRequest">
     insert into w_product (id, category_id, name, 
       subtitle, main_image, detail, 
       price, status, create_time, 
@@ -39,74 +39,52 @@
       #{price,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-    <insert id="insertSelective" parameterType="com.neuedu.entity.Product">
-        insert into w_product
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="categoryId != null">
-                category_id,
-            </if>
-            <if test="name != null">
-                name,
-            </if>
-            <if test="subtitle != null">
-                subtitle,
-            </if>
-            <if test="mainImage != null">
-                main_image,
-            </if>
-            <if test="detail != null">
-                detail,
-            </if>
-            <if test="price != null">
-                price,
-            </if>
-            <if test="status != null">
-                status,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
-            <if test="categoryId != null">
-                #{categoryId,jdbcType=INTEGER},
-            </if>
-            <if test="name != null">
-                #{name,jdbcType=VARCHAR},
-            </if>
-            <if test="subtitle != null">
-                #{subtitle,jdbcType=VARCHAR},
-            </if>
-            <if test="mainImage != null">
-                #{mainImage,jdbcType=VARCHAR},
-            </if>
-            <if test="detail != null">
-                #{detail,jdbcType=VARCHAR},
-            </if>
-            <if test="price != null">
-                #{price,jdbcType=DECIMAL},
-            </if>
-            <if test="status != null">
-                #{status,jdbcType=INTEGER},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-        </trim>
+    <insert id="insertSelective" parameterType="com.hechuan.waimai.dto.Product">
+        insert into w_product (
+        <if test="categoryId != null">category_id,
+        </if>
+        <if test="name != null">
+            name,
+        </if>
+        <if test="subtitle != null">
+            subtitle,
+        </if>
+        <if test="mainImage != null">
+            main_image,
+        </if>
+        <if test="detail != null">
+            detail,
+        </if>
+        <if test="price != null">
+            price,
+        </if>
+        status,
+        create_time
+        )
+        values (
+        <if test="
+        categoryId != null">
+            #{categoryId,jdbcType=INTEGER},
+        </if>
+        <if test="name != null">
+            #{name,jdbcType=VARCHAR},
+        </if>
+        <if test="subtitle != null">
+            #{subtitle,jdbcType=VARCHAR},
+        </if>
+        <if test="mainImage != null">
+            #{mainImage,jdbcType=VARCHAR},
+        </if>
+        <if test="detail != null">
+            #{detail,jdbcType=VARCHAR},
+        </if>
+        <if test="price != null">
+            #{price,jdbcType=DECIMAL},
+        </if>
+        1,now()
+        )
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.neuedu.entity.Product">
+    <update id="updateByPrimaryKeySelective" parameterType="com.hechuan.waimai.dto.Product">
         update w_product
         <set>
             <if test="categoryId != null">
@@ -139,7 +117,7 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.neuedu.entity.Product">
+    <update id="updateByPrimaryKey" parameterType="com.hechuan.waimai.dto.Product">
     update w_product
     set category_id = #{categoryId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
@@ -153,9 +131,47 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <select id="queryProductList" parameterType="com.hechuan.waimai.dto.ProductListRequest" resultType="com.neuedu.entity.Product">
+    <select id="queryProductList" parameterType="com.hechuan.waimai.dto.ProductListRequest"
+            resultType="com.hechuan.waimai.dto.Product">
         select
         <include refid="Base_Column_List"/>
-        from w_product order by create_time desc
+        from w_product
+        <where>
+            <if test="startPrice!=null">
+                and price between #{startPrice} and #{endPrice}
+            </if>
+            <if test="categoryId!=null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status!=null">
+                and status = #{status}
+            </if>
+        </where>
+        order by create_time desc
     </select>
+
+    <update id="updataProduct" parameterType="com.hechuan.waimai.dto.ProductRequest">
+        update w_product
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                subtitle = #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="mainImage != null">
+                main_image = #{mainImage,jdbcType=VARCHAR},
+            </if>
+            <if test="detail != null">
+                detail = #{detail,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+        </set>
+        where name = #{name,jdbcType=VARCHAR}
+    </update>
 </mapper>

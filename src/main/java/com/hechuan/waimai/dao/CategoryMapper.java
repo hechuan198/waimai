@@ -1,6 +1,6 @@
 package com.hechuan.waimai.dao;
 
-import com.neuedu.entity.Category;
+import com.hechuan.waimai.dto.Category;
 import org.springframework.stereotype.Repository;
 
 @Repository

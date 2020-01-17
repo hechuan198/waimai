@@ -1,7 +1,8 @@
 package com.hechuan.waimai.dao;
 
+import com.hechuan.waimai.dto.Product;
+import com.hechuan.waimai.dto.ProductRequest;
 import com.hechuan.waimai.dto.ProductListRequest;
-import com.neuedu.entity.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,16 +12,16 @@ import java.util.List;
 public interface ProductMapper {
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Product record);
+    int insert(ProductRequest ProductRequest);
 
-    int insertSelective(Product record);
+    int insertSelective(ProductRequest record);
 
     Product selectByPrimaryKey(Integer id);
 
 
-    int updateByPrimaryKeySelective(Product record);
+    int updateByPrimaryKeySelective(ProductRequest record);
 
-    int updateByPrimaryKey(Product record);
+    int updateByPrimaryKey(ProductRequest record);
 
     /**
      * 根据分页信息查询list
@@ -28,4 +29,10 @@ public interface ProductMapper {
      * @return
      */
     List<Product> queryProductList(ProductListRequest productListRequest);
+
+    /**
+     * 修改商品
+     * @param productRequest
+     */
+    void updataProduct(ProductRequest productRequest);
 }
