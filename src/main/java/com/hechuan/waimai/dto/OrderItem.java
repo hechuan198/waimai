@@ -28,9 +28,11 @@ public class OrderItem {
 
     private BigDecimal totalPrice;
 
-    private Date createTime;
+    private String createTime;
 
-    private Date updateTime;
+    private String updateTime;
 
+    private Integer pageNum;
 
+    private Integer pageSize;
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hechuan.waimai.dao.CategoryMapper" >
-  <resultMap id="BaseResultMap" type="com.hechuan.waimai.dto.Category" >
+  <!--<resultMap id="BaseResultMap" type="com.hechuan.waimai.dto.Category" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -11,11 +11,11 @@
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
     </constructor>
-  </resultMap>
+  </resultMap>-->
   <sql id="Base_Column_List" >
     id, parent_id, name, status, sort_order, create_time, update_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultType="com.hechuan.waimai.dto.Category" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from w_category
@@ -26,12 +26,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.hechuan.waimai.dto.Category" >
-    insert into w_category (id, parent_id, name, 
-      status, sort_order, create_time, 
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{status,jdbcType=BIT}, #{sortOrder,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into w_category (parent_id, name,
+      status, sort_order, create_time)
+    values ( #{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+      1, 1, now())
   </insert>
   <insert id="insertSelective" parameterType="com.hechuan.waimai.dto.Category" >
     insert into w_category
@@ -97,14 +95,14 @@
       <if test="sortOrder != null" >
         sort_order = #{sortOrder,jdbcType=INTEGER},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where 1=1
+    <if test="id != null">
+      and id = #{id}
+    </if>
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hechuan.waimai.dto.Category" >
     update w_category
@@ -116,4 +114,15 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectCate" parameterType="com.hechuan.waimai.dto.Category" resultType="com.hechuan.waimai.dto.Category">
+    select <include refid="Base_Column_List"></include> from w_category where 1=1
+    <if test="name != null">
+      and name = #{name}
+    </if>
+  </select>
+
+  <select id="queryCategoryList" resultType="com.hechuan.waimai.dto.Category">
+    select <include refid="Base_Column_List"/> from w_category
+  </select>
 </mapper>

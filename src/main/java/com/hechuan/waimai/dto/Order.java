@@ -36,4 +36,8 @@ public class Order {
 
     private String updateTime;
 
+    private Integer pageNum;
+
+    private Integer pageSize;
+
 }

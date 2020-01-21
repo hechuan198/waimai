@@ -19,9 +19,9 @@ public class Category {
 
     private Integer sortOrder;
 
-    private Date createTime;
+    private String createTime;
 
-    private Date updateTime;
+    private String updateTime;
 
 
 }

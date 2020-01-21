@@ -2,7 +2,10 @@ package com.hechuan.waimai.dao;
 
 import com.hechuan.waimai.dto.Order;
 import com.hechuan.waimai.dto.OrderRequest;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface OrderMapper {
@@ -14,10 +17,12 @@ public interface OrderMapper {
 
     Order selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Order record);
+    int updateByPrimaryKeySelective(OrderRequest record);
 
     int updateByPrimaryKey(Order record);
 
 
-    void queryOrderList(OrderRequest order);
+    List<Order> queryOrderList(OrderRequest order);
+
+    Integer queryOrderCount(@Param("status") Integer status);
 }

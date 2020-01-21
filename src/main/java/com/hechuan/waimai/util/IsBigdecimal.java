@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 判断是否符合金额的正则表达式
+ */
 public class IsBigdecimal {
 
     public static boolean isBigdecimal(BigDecimal bigDecimal){

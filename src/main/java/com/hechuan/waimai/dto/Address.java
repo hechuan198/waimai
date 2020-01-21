@@ -30,8 +30,8 @@ public class Address {
 
     private String receiverZip;
 
-    private Date createTime;
+    private String createTime;
 
-    private Date updateTime;
+    private String updateTime;
 
 }

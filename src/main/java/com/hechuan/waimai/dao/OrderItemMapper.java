@@ -4,6 +4,8 @@ package com.hechuan.waimai.dao;
 import com.hechuan.waimai.dto.OrderItem;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface OrderItemMapper {
     int deleteByPrimaryKey(Integer id);
@@ -17,4 +19,6 @@ public interface OrderItemMapper {
     int updateByPrimaryKeySelective(OrderItem record);
 
     int updateByPrimaryKey(OrderItem record);
+
+    List<OrderItem> queryOrderDetailList(OrderItem orderItem);
 }
