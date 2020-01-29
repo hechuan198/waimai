@@ -4,6 +4,8 @@ import com.hechuan.waimai.dto.User;
 import com.hechuan.waimai.dto.UserDTO;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,7 +16,7 @@ public interface UserMapper {
 
     UserDTO selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(User record);
+    int updateByPrimaryKeySelective(UserDTO record);
 
     int updateByPrimaryKey(User record);
 
@@ -27,5 +29,9 @@ public interface UserMapper {
 
     UserDTO updatePassword(UserDTO userDTO);
 
+
+    Integer queryUserCount();
+
+    List<User> queryUserList(UserDTO userDTO);
 
 }

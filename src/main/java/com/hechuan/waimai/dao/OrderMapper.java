@@ -24,5 +24,13 @@ public interface OrderMapper {
 
     List<Order> queryOrderList(OrderRequest order);
 
-    Integer queryOrderCount(@Param("status") Integer status);
+    /**
+     * 根据状态查询订单数
+     * @param status
+     * @return
+     */
+    Integer queryOrderCountStatus(@Param("status") Integer status);
+
+
+
 }

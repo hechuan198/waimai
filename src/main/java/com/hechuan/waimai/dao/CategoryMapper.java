@@ -28,5 +28,11 @@ public interface CategoryMapper {
 
     List<Category> queryCategoryList();
 
+    /**
+     * 查询分类总数
+     * @return
+     */
+    Integer queryCategoryCount();
+
 //    void addCate(Category category);
 }

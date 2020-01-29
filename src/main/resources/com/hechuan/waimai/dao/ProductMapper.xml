@@ -174,4 +174,8 @@
         </set>
         where name = #{name,jdbcType=VARCHAR}
     </update>
+
+    <select id="queryProductCount" resultType="int">
+        select count(*)  from w_product
+    </select>
 </mapper>

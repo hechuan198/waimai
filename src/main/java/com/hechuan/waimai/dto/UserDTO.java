@@ -9,6 +9,8 @@ import lombok.ToString;
 @ToString
 public class UserDTO {
 
+    private Integer id;
+
     /**
      * 用户名
      */
@@ -41,6 +43,16 @@ public class UserDTO {
      * 角色 2：用户
      */
     private Integer role;
+
+    private Integer status;
+
+    private String createTime;
+
+    private String updateTime;
+
+    private Integer pageNum;
+
+    private Integer pageSize;
 
 
 }

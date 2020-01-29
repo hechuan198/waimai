@@ -1,7 +1,11 @@
 package com.hechuan.waimai.service;
 
+import com.github.pagehelper.PageInfo;
+import com.hechuan.waimai.dto.User;
 import com.hechuan.waimai.dto.UserDTO;
 import com.hechuan.waimai.util.ResultVO;
+
+import java.util.List;
 
 public interface UserService {
     /**
@@ -54,4 +58,12 @@ public interface UserService {
      */
     ResultVO password(UserDTO userDTO);
 
+    /**
+     * 分页查询用户信息
+     * @param userDTO
+     * @return
+     */
+    PageInfo<User> queryUserList(UserDTO userDTO);
+
+    ResultVO updateUserStatus(UserDTO userDTO);
 }

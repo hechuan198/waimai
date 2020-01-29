@@ -16,7 +16,7 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, username, password, email, phone, question, answer, role, create_time, update_time
+    id, username, password, email, phone, question, answer, role, date_format(create_time, '%Y-%m-%d %H:%i:%s') create_time,date_format(update_time, '%Y-%m-%d %H:%i:%s') update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -105,7 +105,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.hechuan.waimai.dao.UserMapper">
+  <update id="updateByPrimaryKeySelective" parameterType="com.hechuan.waimai.dto.UserDTO">
     update w_user
     <set>
       <if test="username != null">
@@ -128,6 +128,9 @@
       </if>
       <if test="role != null">
         role = #{role,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=DATE},
@@ -169,6 +172,14 @@
         update w_user set password = #{password} where username = #{username}
     </update>
 
+    <select id="queryUserCount" resultType="int">
+      select count(*) from w_user
+    </select>
 
-
+    <select id="queryUserList" parameterType="com.hechuan.waimai.dto.UserDTO" resultType="com.hechuan.waimai.dto.User">
+      select <include refid="Base_Column_List"/> from w_user where role = 2
+      <if test="username != null">
+        and username = #{username}
+      </if>
+    </select>
 </mapper>

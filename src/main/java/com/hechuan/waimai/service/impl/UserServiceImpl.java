@@ -1,11 +1,16 @@
 package com.hechuan.waimai.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.hechuan.waimai.dao.UserMapper;
+import com.hechuan.waimai.dto.User;
 import com.hechuan.waimai.dto.UserDTO;
 import com.hechuan.waimai.service.UserService;
 import com.hechuan.waimai.util.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -86,6 +91,24 @@ public class UserServiceImpl implements UserService {
         userMapper.updatePassword(userDTO);
 
         return ResultVO.success("修改密码成功");
+    }
+
+    /**
+     * 分页查询用户信息
+     * @param userDTO
+     * @return
+     */
+    @Override
+    public PageInfo<User> queryUserList(UserDTO userDTO) {
+        return PageHelper.startPage(userDTO.getPageNum(),userDTO.getPageSize()).doSelectPageInfo(() -> userMapper.queryUserList(userDTO));
+    }
+
+    @Override
+    public ResultVO updateUserStatus(UserDTO userDTO) {
+
+        userMapper.updateByPrimaryKeySelective(userDTO);
+
+        return ResultVO.success("冻结解冻成功");
     }
 /*
     private UserDTO transform(UserDTO userDTO){

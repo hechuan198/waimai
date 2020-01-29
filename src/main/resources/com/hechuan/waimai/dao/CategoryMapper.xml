@@ -125,4 +125,8 @@
   <select id="queryCategoryList" resultType="com.hechuan.waimai.dto.Category">
     select <include refid="Base_Column_List"/> from w_category
   </select>
+
+  <select id="queryCategoryCount" resultType="int">
+    select count(*) from w_category
+  </select>
 </mapper>

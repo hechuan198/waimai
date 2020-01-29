@@ -1,10 +1,16 @@
 package com.hechuan.waimai.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageInfo;
+import com.hechuan.waimai.dto.User;
 import com.hechuan.waimai.dto.UserDTO;
 import com.hechuan.waimai.dto.UserForm;
 import com.hechuan.waimai.service.UserService;
+import com.hechuan.waimai.service.impl.ProductServiceImpl;
 import com.hechuan.waimai.util.ImageVerificationCode;
 import com.hechuan.waimai.util.ResultVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -20,12 +26,16 @@ import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 
 @RestController
 @RequestMapping("user/")
 @CrossOrigin
 public class UserController {
+
+    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
+
 
     @Autowired
     private UserService userService;
@@ -227,4 +237,28 @@ public class UserController {
         ivc.output(image, response.getOutputStream());
     }
 
+    /**
+     * 分页查询用户
+     * @return
+     */
+    @PostMapping("queryUserList")
+    public ResultVO queryUserList(UserDTO userDTO){
+        log.info("【分页查询用户开始，请求参数】 = {}", JSON.toJSONString(userDTO));
+        PageInfo<User> userPageInfo = userService.queryUserList(userDTO);
+        log.info("【分页查询用户信息，返回结果】 = {}",JSON.toJSONString(userPageInfo));
+        return ResultVO.success(userPageInfo);
+    }
+
+    /**
+     * 冻结/解冻用户
+     * @param userDTO
+     * @return
+     */
+    @PostMapping("updateUserStatus")
+    public ResultVO updateUserStatus(UserDTO userDTO){
+        log.info("【冻结/解冻用户开始，请求参数】 = {}",JSON.toJSONString(userDTO));
+        ResultVO resultVO = userService.updateUserStatus(userDTO);
+        log.info("【冻结解冻用户结束】");
+        return resultVO;
+    }
 }

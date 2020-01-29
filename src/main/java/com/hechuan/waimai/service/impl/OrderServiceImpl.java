@@ -35,9 +35,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderCountDTO queryOrderCount() {
-         Integer countTodo = orderMapper.queryOrderCount(Constant.OrderStatus.PAY);
-         Integer countDoing = orderMapper.queryOrderCount(Constant.OrderStatus.HANDLE);
-         Integer countDone = orderMapper.queryOrderCount(Constant.OrderStatus.SHIPPED);
+         Integer countTodo = orderMapper.queryOrderCountStatus(Constant.OrderStatus.PAY);
+         Integer countDoing = orderMapper.queryOrderCountStatus(Constant.OrderStatus.HANDLE);
+         Integer countDone = orderMapper.queryOrderCountStatus(Constant.OrderStatus.SHIPPED);
 
         OrderCountDTO orderCountDTO = new OrderCountDTO();
         orderCountDTO.setNewOrderCount(countDoing);

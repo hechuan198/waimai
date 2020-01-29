@@ -35,4 +35,11 @@ public interface ProductMapper {
      * @param productRequest
      */
     void updataProduct(ProductRequest productRequest);
+
+    /**
+     * 查询商品总数
+     * @return
+     */
+    Integer queryProductCount();
+
 }
