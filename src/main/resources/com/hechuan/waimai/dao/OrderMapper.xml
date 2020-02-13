@@ -131,44 +131,7 @@
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.hechuan.waimai.dto.OrderRequest">
         update w_order
-        <set>
-            <if test="orderNo != null">
-                order_no = #{orderNo,jdbcType=BIGINT},
-            </if>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="payment != null">
-                payment = #{payment,jdbcType=DECIMAL},
-            </if>
-            <if test="paymentType != null">
-                payment_type = #{paymentType,jdbcType=INTEGER},
-            </if>
-            <if test="postage != null">
-                postage = #{postage,jdbcType=INTEGER},
-            </if>
-            <if test="status != null">
-                status = #{status,jdbcType=INTEGER},
-            </if>
-            <if test="paymentTime != null">
-                payment_time = #{paymentTime},
-            </if>
-            <if test="sendTime != null">
-                send_time = #{sendTime},
-            </if>
-            <if test="endTime != null">
-                end_time = #{endTime},
-            </if>
-            <if test="closeTime != null">
-                close_time = #{closeTime},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
-            </if>
-        </set>
+        set status = #{status},update_time = now()
         where order_no = #{orderNo}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.hechuan.waimai.dto.Order">
@@ -196,11 +159,17 @@
         <if test="orderNo != null">
             and order_no = #{orderNo,jdbcType=BIGINT}
         </if>
-        <if test="startTime != null">
+        <if test="startTime != null and startTime != ''">
             and create_time between #{startTime} and #{endTime}
         </if>
-        <if test="status != null">
-            and status in (#{status})
+        <if test="status == 1">
+            and status in (1,2)
+        </if>
+        <if test="status == 3">
+            and status = 3
+        </if>
+        <if test="status == 4">
+            and status in (4,5)
         </if>
     </select>
 

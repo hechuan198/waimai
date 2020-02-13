@@ -42,4 +42,10 @@ public interface ProductMapper {
      */
     Integer queryProductCount();
 
+    /**
+     * 根据商品名查询商品
+     * @param productRequest
+     * @return
+     */
+    Product queryProduct(ProductRequest productRequest);
 }

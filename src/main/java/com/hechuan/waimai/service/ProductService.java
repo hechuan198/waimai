@@ -12,4 +12,6 @@ public interface ProductService {
     void addProduct(ProductRequest productRequest);
 
     void updataProduct(ProductRequest productRequest);
+
+    Product queryProduct(ProductRequest productRequest);
 }

@@ -42,7 +42,13 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void addProduct(ProductRequest productRequest) {
-        productMapper.insertSelective(productRequest);
+
+        try {
+            productMapper.insertSelective(productRequest);
+        } catch (Exception e) {
+            log.error("【添加失败】= {}",e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -55,5 +61,18 @@ public class ProductServiceImpl implements ProductService {
         productMapper.updataProduct(productRequest);
 
 
+    }
+
+    /**
+     * 查询一个商品
+     * @param productRequest
+     * @return
+     */
+    @Override
+    public Product queryProduct(ProductRequest productRequest) {
+
+        Product product = productMapper.queryProduct(productRequest);
+
+        return product;
     }
 }

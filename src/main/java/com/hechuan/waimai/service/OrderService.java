@@ -7,6 +7,11 @@ import com.hechuan.waimai.dto.OrderItem;
 import com.hechuan.waimai.dto.OrderRequest;
 
 public interface OrderService {
+    /**
+     * 分页查询订单
+     * @param order
+     * @return
+     */
     PageInfo<Order> queryOrderList(OrderRequest order);
 
     /**

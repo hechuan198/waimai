@@ -26,12 +26,12 @@ public class ProductRequest {
      * 分类
      */
     @NotEmpty(message = "分类不能为空")
-    private String categoryId;
-    /**
-     * 商品副标题
-     */
-    @NotEmpty(message = "商品副标题不能为空")
-    private String subtitle;
+    private Integer categoryId;
+//    /**
+//     * 商品副标题
+//     */
+//    @NotEmpty(message = "商品副标题不能为空")
+//    private String subtitle;
     /**
      * 商品价格
      */
@@ -42,5 +42,10 @@ public class ProductRequest {
      */
     @NotEmpty(message = "商品描述不能为空")
     private String detail;
+
+    /**
+     * 商品状态
+     */
+    private Integer status;
 
 }

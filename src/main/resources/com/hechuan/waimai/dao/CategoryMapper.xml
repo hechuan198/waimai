@@ -83,19 +83,19 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.hechuan.waimai.dto.Category" >
     update w_category
     <set >
-      <if test="parentId != null" >
+      <if test="parentId != null and parentId != ''" >
         parent_id = #{parentId,jdbcType=INTEGER},
       </if>
-      <if test="name != null" >
+      <if test="name != null and name != ''" >
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="status != null" >
+      <if test="status != null and status != ''" >
         status = #{status,jdbcType=BIT},
       </if>
-      <if test="sortOrder != null" >
+      <if test="sortOrder != null and sortOrder != ''" >
         sort_order = #{sortOrder,jdbcType=INTEGER},
       </if>
-      <if test="updateTime != null" >
+      <if test="updateTime != null and updateTime != ''" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
@@ -123,7 +123,7 @@
   </select>
 
   <select id="queryCategoryList" resultType="com.hechuan.waimai.dto.Category">
-    select <include refid="Base_Column_List"/> from w_category
+    select <include refid="Base_Column_List"/> from w_category where status != 3
   </select>
 
   <select id="queryCategoryCount" resultType="int">

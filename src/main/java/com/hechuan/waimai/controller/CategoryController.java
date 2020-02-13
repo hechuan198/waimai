@@ -29,7 +29,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     /**
-     * 添加/编辑分类
+     * 添加分类
      * @param category
      * @return
      */
@@ -37,7 +37,18 @@ public class CategoryController {
     public ResultVO addCategory(Category category){
         log.info("【添加/编辑分类，请求参数】 = {}", JSON.toJSONString(category));
         ResultVO resultVO = categoryService.addCategory(category);
+        return resultVO;
+    }
 
+    /**
+     * 编辑分类
+     * @param category
+     * @return
+     */
+    @PostMapping("updateCategory")
+    public ResultVO updateCategory(Category category){
+        log.info("【添加/编辑分类，请求参数】 = {}", JSON.toJSONString(category));
+        ResultVO resultVO = categoryService.updateCategory(category);
         return resultVO;
     }
 

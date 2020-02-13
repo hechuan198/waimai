@@ -15,7 +15,7 @@ public class Category {
 
     private String name;
 
-    private Boolean status;
+    private Integer status;
 
     private Integer sortOrder;
 

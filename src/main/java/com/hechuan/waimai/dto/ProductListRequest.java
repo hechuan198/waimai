@@ -14,7 +14,7 @@ public class ProductListRequest {
     /**
      * 开始价格
      */
-    @NotEmpty
+//    @NotEmpty
     private BigDecimal startPrice;
     /**
      * 结束价格
