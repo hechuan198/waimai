@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.hechuan.waimai.dao.FilmDAO">
+	<resultMap type="com.hechuan.waimai.entity.Film" id="filmMap">
+		<id property="filmid" column="id" />
+		<result property="filmname" column="name" />
+		<result property="image" column="main_image" />
+		<result property="cateid" column="category_id" />
+		<result property="price" column="price" />
+		<result property="recommend" column="status" />
+		<result property="thestart" column="create_time" />
+		<result property="theend" column="update_time" />
+		<result property="hits" column="hits" />
+		<result property="sellnum" column="sellnum" />
+		<result property="contents" column="detail" />
+		<result property="catename" column="catename" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertFilm" parameterType="com.hechuan.waimai.entity.Film">
+		insert into w_product(id ,
+		name , main_image , category_id , price , status ,
+		create_time , update_time ,
+		hits , sellnum , detail ) values(#{filmid} ,
+		#{filmname} , #{image} ,
+		#{cateid} , #{price} , #{recommend} ,
+		#{thestart} , #{theend} , #{hits}
+		, #{sellnum} , #{contents} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateFilm" parameterType="com.hechuan.waimai.entity.Film">
+		update w_product set
+		name=#{filmname} , main_image=#{image} , category_id=#{cateid} ,
+		price=#{price} , status=#{recommend} , create_time=#{thestart} ,
+		update_time=#{theend} , hits=#{hits} , sellnum=#{sellnum} ,
+		detail=#{contents} where id=#{filmid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteFilm" parameterType="String">
+		delete from w_product where
+		id = #{filmid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllFilm" resultMap="filmMap">
+		select a.* , b.name catename from
+		w_product a , w_category b where 1=1 and a.status = 1 and a.category_id =
+		b.id order by a.id desc
+	</select>
+
+	<select id="getFilmByNews" resultMap="filmMap">
+		select a.* , b.name catename
+		from w_product a , w_category b where a.category_id = b.id and a.status = 1
+		order by a.id desc
+		limit 5
+	</select>
+
+	<select id="getFilmByHot" resultMap="filmMap">
+		select a.* , b.name catename
+		from
+		w_product a , w_category b where a.category_id = b.id and a.status = 1
+		order
+		by hits desc
+		limit 5
+	</select>
+
+	<select id="getFilmByCate" parameterType="String" resultMap="filmMap">
+		select a.* , b.name catename from w_product a , w_category b
+		where a.category_id = b.id and a.status = 1
+		and a.category_id=#{cateid} order by
+		hits desc limit
+		5
+	</select>
+
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getFilmById" parameterType="String" resultMap="filmMap">
+		select a.* , b.name catename from w_product a , w_category b where 1=1 and a.status = 1 and a.category_id =
+		b.id and a.id=#{filmid} order by a.id desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getFilmByCond" parameterType="com.hechuan.waimai.entity.Film" resultMap="filmMap">
+		select a.* , b.name catename from w_product a , w_category b where 1=1 and a.category_id =
+		b.id and a.status = 1
+		<if test="filmname != null and '' != filmname">
+			and a.name = #{filmname}
+		</if>
+		<if test="image != null and '' != image">
+			and a.main_image = #{image}
+		</if>
+		<if test="cateid != null and '' != cateid">
+			and a.category_id = #{cateid}
+		</if>
+		<if test="price != null and '' != price">
+			and a.price = #{price}
+		</if>
+		<if test="recommend != null and '' != recommend">
+			and a.status = #{recommend}
+		</if>
+		<if test="thestart != null and '' != thestart">
+			and a.create_time = #{thestart}
+		</if>
+		<if test="theend != null and '' != theend">
+			and a.update_time = #{theend}
+		</if>
+		<if test="hits != null and '' != hits">
+			and a.hits = #{hits}
+		</if>
+		<if test="sellnum != null and '' != sellnum">
+			and a.sellnum = #{sellnum}
+		</if>
+		<if test="contents != null and '' != contents">
+			and a.detail = #{contents}
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getFilmByLike" parameterType="com.hechuan.waimai.entity.Film" resultMap="filmMap">
+		select a.* , b.name catename from w_product a , w_category b where 1=1 and a.category_id =
+		b.id and a.status = 1
+		<if test="filmname != null and '' != filmname">
+			and a.name like CONCAT('%', CONCAT(#{filmname}, '%'))
+		</if>
+		<if test="image != null and '' != image">
+			and a.main_image like CONCAT('%', CONCAT(#{image}, '%'))
+		</if>
+		<if test="cateid != null and '' != cateid">
+			and a.category_id like CONCAT('%', CONCAT(#{cateid}, '%'))
+		</if>
+		<if test="price != null and '' != price">
+			and a.price like CONCAT('%', CONCAT(#{price}, '%'))
+		</if>
+		<if test="recommend != null and '' != recommend">
+			and a.status like CONCAT('%', CONCAT(#{recommend},
+			'%'))
+		</if>
+		<if test="thestart != null and '' != thestart">
+			and a.create_time like CONCAT('%', CONCAT(#{thestart}, '%'))
+		</if>
+		<if test="theend != null and '' != theend">
+			and a.update_time like CONCAT('%', CONCAT(#{theend}, '%'))
+		</if>
+		<if test="hits != null and '' != hits">
+			and a.hits like CONCAT('%', CONCAT(#{hits}, '%'))
+		</if>
+		<if test="sellnum != null and '' != sellnum">
+			and a.sellnum like CONCAT('%', CONCAT(#{sellnum}, '%'))
+		</if>
+		<if test="contents != null and '' != contents">
+			and a.detail like CONCAT('%', CONCAT(#{contents}, '%'))
+		</if>
+	</select>
+</mapper>
+
+

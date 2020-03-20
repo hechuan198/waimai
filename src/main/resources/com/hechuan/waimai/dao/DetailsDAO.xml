@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.or  g/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.hechuan.waimai.dao.DetailsDAO">
+	<resultMap type="com.hechuan.waimai.entity.Details" id="detailsMap">
+		<id property="detailsid" column="id" />
+		<result property="ordercode" column="order_no" />
+		<result property="filmid" column="product_id" />
+		<result property="num" column="quantity" />
+		<result property="price" column="current_unit_price" />
+		<result property="receiverAddress" column="receiver_address" />
+		<result property="viewdate" column="create_time" />
+		<result property="filmname" column="product_name" />
+	</resultMap>
+	<sql id="all" >
+		a.id, a.order_no, a.product_id, a.quantity, a.current_unit_price, a.receiver_address, a.create_time, a.product_name
+	</sql>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertDetails" parameterType="com.hechuan.waimai.entity.Details">
+		insert into w_order_item(id ,user_id ,order_no , product_id ,product_name,total_price, quantity , current_unit_price ,
+		 create_time ,receiver_address) values(#{detailsid} ,#{userId} ,#{ordercode} , #{filmid} ,#{filmname},#{totalPrice},
+		#{num} , #{price} , #{viewdate} ,#{receiverAddress})
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateDetails" parameterType="com.hechuan.waimai.entity.Details">
+		update w_order_item set order_no=#{ordercode} , product_id=#{filmid} , quantity=#{num} ,
+		current_unit_price=#{price} , cityid=#{cityid} , cinemaid=#{cinemaid} ,
+		create_time=#{viewdate} where id=#{detailsid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteDetails" parameterType="String">
+		delete from w_order_item where id = #{detailsid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllDetails" resultMap="detailsMap">
+		select a.*  from detail a order by id desc
+	</select>
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getDetailsById" parameterType="String" resultMap="detailsMap">
+		select a.* from w_order_item a
+		 where
+		id=#{detailsid} order by id desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getDetailsByCond" parameterType="com.hechuan.waimai.entity.Details" resultMap="detailsMap">
+		select <include refid="all"/>from w_order_item a
+		 where 1=1
+		<if test="ordercode != null and '' != ordercode">
+			and a.order_no = #{ordercode}
+		</if>
+		<if test="filmid != null and '' != filmid">
+			and a.product_id = #{filmid}
+		</if>
+		<if test="num != null and '' != num">
+			and a.quantity = #{num}
+		</if>
+		<if test="price != null and '' != price">
+			and a.current_unit_price = #{price}
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getDetailsByLike" parameterType="com.hechuan.waimai.entity.Details" resultMap="detailsMap">
+		select a.* from w_order_item a
+		 where 1=1
+		<if test="ordercode != null and '' != ordercode">
+			and a.order_no like CONCAT('%', CONCAT(#{ordercode}, '%'))
+		</if>
+		<if test="filmid != null and '' != filmid">
+			and a.product_id like CONCAT('%', CONCAT(#{filmid}, '%'))
+		</if>
+		<if test="num != null and '' != num">
+			and a.quantity like CONCAT('%', CONCAT(#{num}, '%'))
+		</if>
+		<if test="price != null and '' != price">
+			and a.current_unit_price like CONCAT('%', CONCAT(#{price}, '%'))
+		</if>
+	</select>
+</mapper>
+
+

@@ -129,4 +129,15 @@
   <select id="queryCategoryCount" resultType="int">
     select count(*) from w_category
   </select>
+
+  <select id="queryCategory" parameterType="com.hechuan.waimai.dto.Category" resultType="com.hechuan.waimai.dto.Category">
+    select <include refid="Base_Column_List" /> from w_category where 1=1
+    <if test="name != null and name != ''">
+      and name = #{name}
+    </if>
+    <if test="id != null and id != ''">
+      and id = #{id}
+    </if>
+
+  </select>
 </mapper>

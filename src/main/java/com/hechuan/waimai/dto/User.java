@@ -1,15 +1,14 @@
 package com.hechuan.waimai.dto;
 
+import com.hechuan.waimai.util.VeDate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.util.Date;
 @Data
 @ToString
 @NoArgsConstructor
 public class User {
-    private Integer id;
+    private String id = "U" + VeDate.getStringId();
 
     private String username;
 
@@ -24,6 +23,8 @@ public class User {
     private String answer;
 
     private Integer role;
+
+    private Integer status;
 
     private String createTime;
 

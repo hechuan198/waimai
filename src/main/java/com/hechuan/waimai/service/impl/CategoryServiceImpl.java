@@ -52,4 +52,12 @@ public class CategoryServiceImpl implements CategoryService {
 
         return categoryList;
     }
+
+    @Override
+    public Category queryCategoryByName(Category categoryRequest) {
+
+        Category category = categoryMapper.queryCategory(categoryRequest);
+
+        return category;
+    }
 }

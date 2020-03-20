@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.hechuan.waimai.dao.CartDAO">
+	<resultMap type="com.hechuan.waimai.entity.Cart" id="cartMap">
+		<id property="cartid" column="id" />
+		<result property="usersid" column="user_id" />
+		<result property="filmid" column="product_id" />
+		<result property="num" column="quantity" />
+		<result property="price" column="price" />
+		<result property="username" column="username" />
+		<result property="filmname" column="name" />
+		<result property="image" column="main_image" />
+	</resultMap>
+	<sql id="all" >
+		a.id,a.user_id,a.user_id,a.product_id,a.quantity,a.price
+	</sql>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertCart" parameterType="com.hechuan.waimai.entity.Cart">
+		insert into w_cart(id ,
+		user_id , product_id , quantity , price ) values(#{cartid}
+		, #{usersid} ,
+		#{filmid} , #{num} , #{price} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateCart" parameterType="com.hechuan.waimai.entity.Cart">
+		update w_cart set
+		user_id=#{usersid} , product_id=#{filmid} , quantity=#{num} ,
+		price=#{price}
+		where id=#{cartid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteCart" parameterType="String">
+		delete from w_cart where
+		id = #{cartid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllCart" resultMap="cartMap">
+		select <include refid="all"/> , b.username ,
+		c.name , c.main_image from w_cart a , w_user b , w_product c where
+		1=1 and
+		a.user_id = b.id and a.product_id = c.id order by a.id
+		desc
+	</select>
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getCartById" parameterType="String" resultMap="cartMap">
+		select <include refid="all"/> , b.username , c.name , c.main_image from w_cart a , w_user b ,
+		w_product c
+		where 1=1 and a.user_id = b.id and a.product_id = c.id and
+		id=#{cartid} order by id desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getCartByCond" parameterType="com.hechuan.waimai.entity.Cart" resultMap="cartMap">
+		select <include refid="all"/> , b.username , c.name , c.main_image from w_cart a , w_user b ,
+		w_product c
+		where 1=1 and a.user_id = b.id and a.product_id = c.id
+		<if test="usersid != null and '' != usersid">
+			and a.user_id = #{usersid}
+		</if>
+		<if test="filmid != null and '' != filmid">
+			and a.product_id = #{filmid}
+		</if>
+		<if test="num != null and '' != num">
+			and a.quantity = #{num}
+		</if>
+		<if test="price != null and '' != price">
+			and a.price = #{price}
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getCartByLike" parameterType="com.hechuan.waimai.entity.Cart" resultMap="cartMap">
+		select <include refid="all"/> , b.username , c.name , c.main_image from w_cart a , w_user b ,
+		w_product c
+		where 1=1 and a.user_id = b.id and a.product_id = c.id
+		<if test="usersid != null and '' != usersid">
+			and a.user_id like CONCAT('%', CONCAT(#{usersid}, '%'))
+		</if>
+		<if test="filmid != null and '' != filmid">
+			and a.product_id like CONCAT('%', CONCAT(#{filmid}, '%'))
+		</if>
+		<if test="num != null and '' != num">
+			and a.quantity like CONCAT('%', CONCAT(#{num}, '%'))
+		</if>
+		<if test="price != null and '' != price">
+			and a.price like CONCAT('%', CONCAT(#{price}, '%'))
+		</if>
+	</select>
+</mapper>
+
+

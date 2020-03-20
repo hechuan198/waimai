@@ -6,6 +6,8 @@ import com.hechuan.waimai.dto.OrderCountDTO;
 import com.hechuan.waimai.dto.OrderItem;
 import com.hechuan.waimai.dto.OrderRequest;
 
+import java.util.List;
+
 public interface OrderService {
     /**
      * 分页查询订单
@@ -23,4 +25,9 @@ public interface OrderService {
 
     OrderCountDTO queryOrderCount();
 
+    /**
+     * 查询每月订单数
+     * @return
+     */
+    List<OrderCountDTO> queryOrderByMonth();
 }

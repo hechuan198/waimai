@@ -19,8 +19,8 @@
       </constructor>
     </resultMap>-->
     <sql id="Base_Column_List">
-    id, order_no, user_id, payment, payment_type, postage, status, date_format(payment_time, '%Y-%m-%d %H-%i-%s') payment_time,date_format(send_time, '%Y-%m-%d %H-%i-%s') send_time,
-    date_format(end_time, '%Y-%m-%d %H-%i-%s') end_time, date_format(close_time, '%Y-%m-%d %H-%i-%s') close_time, date_format(create_time, '%Y-%m-%d %H-%i-%s') create_time, date_format(update_time, '%Y-%m-%d %H-%i-%s') update_time
+    id, order_no, user_id, payment, payment_type, postage, status, date_format(payment_time, '%Y-%m-%d %H"%i:%s') payment_time,date_format(send_time, '%Y-%m-%d %H:%i:%s') send_time,
+    date_format(end_time, '%Y-%m-%d %H:%i:%s') end_time, date_format(close_time, '%Y-%m-%d %H:%i:%s') close_time, date_format(create_time, '%Y-%m-%d %H:%i:%s') create_time, date_format(update_time, '%Y-%m-%d %H:%i:%s') update_time
   </sql>
     <select id="selectByPrimaryKey" resultType="com.hechuan.waimai.dto.Order" parameterType="java.lang.Integer">
         select
@@ -156,34 +156,39 @@
         <include refid="Base_Column_List"/>
         from w_order
         where 1=1
-        <if test="orderNo != null">
+        <if test="orderNo != null and orderNo != ''">
             and order_no = #{orderNo,jdbcType=BIGINT}
         </if>
         <if test="startTime != null and startTime != ''">
             and create_time between #{startTime} and #{endTime}
         </if>
-        <if test="status == 1">
-            and status in (1,2)
+        <if test="status == '未付款'">
+            and status in ('未付款','已付款')
         </if>
-        <if test="status == 3">
-            and status = 3
+        <if test="status == '处理中'">
+            and status = '处理中'
         </if>
-        <if test="status == 4">
-            and status in (4,5)
+        <if test="status == '已发货'">
+            and status in ('已发货','交易成功')
         </if>
+        order by create_time desc
     </select>
 
     <select id="queryOrderCountStatus" resultType="int">
         select count(*) from w_order where 1=1
-        <if test="status == 2">
-            and status = 2
+        <if test="status == '已付款'">
+            and status = '已付款'
         </if>
-        <if test="status == 3">
-            and status = 3
+        <if test="status == '处理中'">
+            and status = '处理中'
         </if>
-        <if test="status == 4">
-            and status in (4,5)
+        <if test="status == '已发货'">
+            and status in ('已发货','交易成功')
         </if>
+        order by create_time desc
     </select>
 
+    <select id="queryOrderByMonth" resultType="com.hechuan.waimai.dto.OrderCountDTO" >
+      select date_format(create_time,'%y年%m月') months , count(*) orderCount from w_order where status in ('已发货','交易成功') group by months order by months asc
+    </select>
 </mapper>

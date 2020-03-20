@@ -10,11 +10,11 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 public class Order {
-    private Integer id;
+    private String id;
 
-    private Long orderNo;
+    private String orderNo;
 
-    private Integer userId;
+    private String userId;
 
     private BigDecimal payment;
 
@@ -22,7 +22,7 @@ public class Order {
 
     private Integer postage;
 
-    private Integer status;
+    private String status;
 
     private String paymentTime;
 

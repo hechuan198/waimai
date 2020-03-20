@@ -28,4 +28,11 @@ public interface CategoryService {
      * @return
      */
     List<Category> queryCategoryList();
+
+    /**
+     * 查询分类
+     * @param categoryRequest
+     * @return
+     */
+    Category queryCategoryByName(Category categoryRequest);
 }

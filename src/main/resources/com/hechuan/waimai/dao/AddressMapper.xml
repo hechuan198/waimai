@@ -21,7 +21,7 @@
     id, user_id, receiver_name, receiver_phone, receiver_mobile, receiver_province, receiver_city, 
     receiver_district, receiver_address, receiver_zip, create_time, update_time
   </sql>
-  <select id="selectByPrimaryKey" resultType="com.hechuan.waimai.dto.Address" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultType="com.hechuan.waimai.dto.Address" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from w_address
@@ -35,13 +35,12 @@
     insert into w_address (id, user_id, receiver_name, 
       receiver_phone, receiver_mobile, receiver_province, 
       receiver_city, receiver_district, receiver_address, 
-      receiver_zip, create_time, update_time
+      receiver_zip, create_time
       )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{receiverName,jdbcType=VARCHAR}, 
       #{receiverPhone,jdbcType=VARCHAR}, #{receiverMobile,jdbcType=VARCHAR}, #{receiverProvince,jdbcType=VARCHAR}, 
       #{receiverCity,jdbcType=VARCHAR}, #{receiverDistrict,jdbcType=VARCHAR}, #{receiverAddress,jdbcType=VARCHAR}, 
-      #{receiverZip,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{receiverZip,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.hechuan.waimai.dto.Address" >
     insert into w_address
@@ -175,5 +174,14 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryAddressList" parameterType="com.hechuan.waimai.dto.Address" resultType="com.hechuan.waimai.dto.Address">
+    select <include refid="Base_Column_List"/> from w_address where user_id = #{userId} and deleted = 1 order by create_time desc
+  </select>
+
+
+  <update id="deleteAddress" parameterType="java.lang.String">
+    update w_address set deleted = 0 where id = #{id}
   </update>
 </mapper>

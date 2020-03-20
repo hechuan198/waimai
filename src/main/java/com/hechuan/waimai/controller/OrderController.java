@@ -2,10 +2,7 @@ package com.hechuan.waimai.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.hechuan.waimai.dto.Order;
-import com.hechuan.waimai.dto.OrderCountDTO;
-import com.hechuan.waimai.dto.OrderItem;
-import com.hechuan.waimai.dto.OrderRequest;
+import com.hechuan.waimai.dto.*;
 import com.hechuan.waimai.service.OrderItemService;
 import com.hechuan.waimai.service.OrderService;
 import com.hechuan.waimai.service.impl.ProductServiceImpl;
@@ -13,10 +10,9 @@ import com.hechuan.waimai.util.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -82,6 +78,16 @@ public class OrderController {
         return ResultVO.success(orderCountDTO);
     }
 
-
+    /**
+     * 查询每月用户数
+     * @return
+     */
+    @PostMapping("queryOrderByMonth")
+    public ResultVO queryOrderByMonth(){
+        log.info("【查询每月订单数开始】");
+        List<OrderCountDTO> orderCountDTOList = orderService.queryOrderByMonth();
+        log.info("【查询每月订单数，查询结果】 = {}",JSON.toJSONString(orderCountDTOList));
+        return ResultVO.success(orderCountDTOList);
+    }
 
 }

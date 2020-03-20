@@ -1,5 +1,6 @@
 package com.hechuan.waimai.dto;
 
+import com.hechuan.waimai.util.VeDate;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -8,6 +9,7 @@ import javax.validation.constraints.Pattern;
 
 @Data
 public class UserForm {
+    private String id = "U" + VeDate.getStringId();
     @NotEmpty(message = "用户名不能为空")
     private String username;
     @NotEmpty(message = "密码不能为空")

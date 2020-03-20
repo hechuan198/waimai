@@ -1,5 +1,6 @@
 package com.hechuan.waimai.dto;
 
+import com.hechuan.waimai.util.VeDate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,6 +13,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @ToString
 public class ProductRequest {
+    private String id = "F" + VeDate.getStringId();
+
     /**
      * 商品图片地址
      */
@@ -26,7 +29,8 @@ public class ProductRequest {
      * 分类
      */
     @NotEmpty(message = "分类不能为空")
-    private Integer categoryId;
+    private String category;
+    private String categoryId;
 //    /**
 //     * 商品副标题
 //     */

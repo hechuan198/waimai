@@ -20,21 +20,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO getUserByUsername(String username) {
-
-        UserDTO userDTO = userMapper.getUserByUsername(username);
-
-//        封装数据
-       /* if (null != userDTO){
-            UserDTO userDTO1 = transform(userDTO);
-            return userDTO1;
-        }
-*/
+    public UserDTO getUserByUsername(String username,Integer role) {
+        UserDTO userDTO = userMapper.getUserByUsernameRole(username, role);
         return userDTO;
     }
 
     @Override
-    public ResultVO getConfirmUsername(String username) {
+    public ResultVO getConfirmUsername(String username ) {
 
         UserDTO userDTO = userMapper.getUserByUsername(username);
         if (userDTO != null){
@@ -47,6 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResultVO register(UserDTO userDTO) {
         userDTO.setRole(2);
+        userDTO.setStatus(1);
         userMapper.insertUser(userDTO);
         return ResultVO.success("注册成功");
     }
@@ -58,8 +51,7 @@ public class UserServiceImpl implements UserService {
         if (null == userDTO){
             return ResultVO.error("用户名不存在");
         }
-        String getusername = userDTO.getUsername();
-        return ResultVO.success("用户名存在",getusername);
+        return ResultVO.success(userDTO);
     }
 
     @Override
@@ -109,6 +101,11 @@ public class UserServiceImpl implements UserService {
         userMapper.updateByPrimaryKeySelective(userDTO);
 
         return ResultVO.success("冻结解冻成功");
+    }
+
+    @Override
+    public List<UserDTO> queryUserByMonth() {
+        return userMapper.queryUserByMonth();
     }
 /*
     private UserDTO transform(UserDTO userDTO){

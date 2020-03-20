@@ -1,5 +1,6 @@
 package com.hechuan.waimai.dto;
 
+import com.hechuan.waimai.util.VeDate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -9,9 +10,9 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 public class Category {
-    private Integer id;
+    private String id  = "C" + VeDate.getStringId();
 
-    private Integer parentId;
+    private String parentId;
 
     private String name;
 

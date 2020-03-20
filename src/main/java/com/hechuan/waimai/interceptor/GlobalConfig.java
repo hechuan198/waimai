@@ -7,19 +7,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class GlobalConfig implements WebMvcConfigurer {
+//
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//
+//        // 注册拦截器
+//        InterceptorRegistration registration = registry.addInterceptor(new GlobalInterceptor());
+//        // 需要拦截的路径
+//        registration.addPathPatterns("/**");
+//        // 不需要拦截的路径
+//        registration.excludePathPatterns();
+//
+//
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
 
-        // 注册拦截器
-        InterceptorRegistration registration = registry.addInterceptor(new GlobalInterceptor());
-        // 需要拦截的路径
-        registration.addPathPatterns("/**");
-        // 不需要拦截的路径
-        registration.excludePathPatterns();
-
-
-
-
-    }
+//    }
 }

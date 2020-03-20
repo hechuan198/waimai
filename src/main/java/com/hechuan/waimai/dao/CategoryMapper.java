@@ -34,5 +34,12 @@ public interface CategoryMapper {
      */
     Integer queryCategoryCount();
 
+    /**
+     * 查询分类
+     * @param categoryRequest
+     * @return
+     */
+    Category queryCategory(Category categoryRequest);
+
 //    void addCate(Category category);
 }

@@ -16,5 +16,9 @@ public class OrderCountDTO {
 
     private Integer doneOrderCount;
 
+    private String months;
+
+    private Integer orderCount;
+
 
 }

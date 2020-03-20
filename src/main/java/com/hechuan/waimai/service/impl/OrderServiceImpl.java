@@ -12,6 +12,8 @@ import com.hechuan.waimai.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -40,11 +42,16 @@ public class OrderServiceImpl implements OrderService {
          Integer countDone = orderMapper.queryOrderCountStatus(Constant.OrderStatus.SHIPPED);
 
         OrderCountDTO orderCountDTO = new OrderCountDTO();
-        orderCountDTO.setNewOrderCount(countDoing);
+        orderCountDTO.setNewOrderCount(countTodo);
         orderCountDTO.setDoingOrderCount(countDoing);
         orderCountDTO.setDoneOrderCount(countDone);
 
         return orderCountDTO;
+    }
+
+    @Override
+    public List<OrderCountDTO> queryOrderByMonth() {
+        return orderMapper.queryOrderByMonth();
     }
 
 

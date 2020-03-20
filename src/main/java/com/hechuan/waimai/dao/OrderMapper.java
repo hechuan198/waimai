@@ -1,6 +1,7 @@
 package com.hechuan.waimai.dao;
 
 import com.hechuan.waimai.dto.Order;
+import com.hechuan.waimai.dto.OrderCountDTO;
 import com.hechuan.waimai.dto.OrderRequest;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -29,8 +30,12 @@ public interface OrderMapper {
      * @param status
      * @return
      */
-    Integer queryOrderCountStatus(@Param("status") Integer status);
+    Integer queryOrderCountStatus(@Param("status") String status);
 
 
-
+    /**
+     * 查询每月订单数量
+     * @return
+     */
+    List<OrderCountDTO> queryOrderByMonth();
 }

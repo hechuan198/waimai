@@ -1,15 +1,18 @@
 package com.hechuan.waimai.dto;
 
+import com.hechuan.waimai.util.VeDate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import javax.print.DocFlavor;
 
 @Data
 @NoArgsConstructor
 @ToString
 public class UserDTO {
 
-    private Integer id;
+    private String id = "U" + VeDate.getStringId();
 
     /**
      * 用户名
@@ -54,5 +57,14 @@ public class UserDTO {
 
     private Integer pageSize;
 
+    /**
+     * 月份
+     */
+    private String months;
+
+    /**
+     * 用户数量
+     */
+    private Integer userCount;
 
 }

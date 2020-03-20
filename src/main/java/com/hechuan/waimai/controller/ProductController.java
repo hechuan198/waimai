@@ -2,13 +2,16 @@ package com.hechuan.waimai.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import com.hechuan.waimai.dto.Category;
 import com.hechuan.waimai.dto.Product;
 import com.hechuan.waimai.dto.ProductListRequest;
 import com.hechuan.waimai.dto.ProductRequest;
+import com.hechuan.waimai.service.CategoryService;
 import com.hechuan.waimai.service.ProductService;
 import com.hechuan.waimai.service.impl.ProductServiceImpl;
 import com.hechuan.waimai.util.IsBigdecimal;
 import com.hechuan.waimai.util.ResultVO;
+import com.hechuan.waimai.util.VeDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -29,6 +33,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
 
@@ -54,7 +61,16 @@ public class ProductController {
      */
     @PostMapping("addProduct")
     public ResultVO addProduct(@Valid ProductRequest productRequest, BindingResult bindingResult){
+        productRequest.setId("F" + VeDate.getStringId());
         log.info("【添加商品，请求参数】 = {}", JSON.toJSONString(productRequest));
+
+        Category categoryRequest = new Category();
+        categoryRequest.setName(productRequest.getCategory());
+        categoryRequest.setId(null);
+        log.info("【查询分类请求参数】 = {}",JSON.toJSONString(categoryRequest));
+        Category category = categoryService.queryCategoryByName(categoryRequest);
+        log.info("【查询分类结果】 = {}", JSON.toJSONString(category));
+        productRequest.setCategoryId(category.getId());
         if (bindingResult.hasErrors()){
             String message = bindingResult.getFieldError().getDefaultMessage();
             return ResultVO.error(message);
@@ -109,8 +125,8 @@ public class ProductController {
         String pathString = null;
         String filename = null;
         if (file != null) {
-            filename =  new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + file.getOriginalFilename();
-            pathString = "G:\\workspace_webStom\\waimai\\img/" + filename;
+            filename = "upfiles/"+ new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + file.getOriginalFilename();
+            pathString = "D:\\work_space\\projectWorkSpace\\waimai\\src\\main\\webapp\\" + filename;
 
         }
 
@@ -130,7 +146,19 @@ public class ProductController {
 
         log.info("【上传成功】");
         return ResultVO.success("",filename);
+    }
 
-
+    /**
+     * 查询热销商品
+     *
+     * @param
+     * @return
+     */
+    @PostMapping("queryHotProductList")
+    public ResultVO queryHotProductList() {
+        log.info("【查询热销商品开始】}");
+        List<Product> productList = productService.queryHotProductList();
+        log.info("【查询热销商品结果，productList】 = {}",JSON.toJSONString(productList));
+        return ResultVO.success(productList);
     }
 }

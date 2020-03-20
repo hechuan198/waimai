@@ -13,7 +13,7 @@ public interface UserService {
      * @param username
      * @return
      */
-    UserDTO getUserByUsername(String username);
+    UserDTO getUserByUsername(String username, Integer role);
 
     /**
      * 注册验证用户名重复
@@ -66,4 +66,11 @@ public interface UserService {
     PageInfo<User> queryUserList(UserDTO userDTO);
 
     ResultVO updateUserStatus(UserDTO userDTO);
+
+    /**
+     * 查询每月用户数
+     * @return
+     */
+    List<UserDTO> queryUserByMonth();
+
 }

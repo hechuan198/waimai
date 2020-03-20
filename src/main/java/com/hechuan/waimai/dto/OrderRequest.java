@@ -15,7 +15,7 @@ public class OrderRequest {
     /**
      * 订单状态
      */
-    private Integer status;
+    private String status;
 
     /**
      * 开始时间
@@ -28,7 +28,7 @@ public class OrderRequest {
     /**
      * 订单号
      */
-    private Long orderNo;
+    private String orderNo;
 
     private Integer pageNum;
 

@@ -48,4 +48,10 @@ public interface ProductMapper {
      * @return
      */
     Product queryProduct(ProductRequest productRequest);
+
+    /**
+     * 查询热销商品
+     * @return
+     */
+    List<Product> queryHotProductList();
 }

@@ -21,17 +21,20 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
 
+    UserDTO getUserByUsernameRole(String username, Integer role);
+
     UserDTO getUserByUsername(String username);
 
     int insertUser(UserDTO userDTO);
 
     UserDTO getUserByUsernameAndAnswer(String username,String answer);
 
-    UserDTO updatePassword(UserDTO userDTO);
+    int updatePassword(UserDTO userDTO);
 
 
     Integer queryUserCount();
 
     List<User> queryUserList(UserDTO userDTO);
 
+    List<UserDTO> queryUserByMonth();
 }

@@ -48,6 +48,8 @@ public class UserController {
     @PostMapping("login")
     public ResultVO login(UserDTO userDTO,String yzm, HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 
+        log.info("【管理员登录开始】，请求参数 = {},验证码 = {}", JSON.toJSONString(userDTO), JSON.toJSONString(yzm));
+
         response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
@@ -60,26 +62,32 @@ public class UserController {
         System.out.println(userDTO);
 
         String username = userDTO.getUsername();
+        Integer role = userDTO.getRole();
         String password = userDTO.getPassword();
 
-        UserDTO userDTO1 = userService.getUserByUsername(username);
+        UserDTO userDTO1 = userService.getUserByUsername(username,role);
         if(null == userDTO1){
+            log.info("用户不存在");
             return ResultVO.error("用户不存在");
         }
         System.out.println(userDTO1);
         if (!password.equals(userDTO1.getPassword())){
+            log.info("密码不正确");
             return ResultVO.error("密码不正确");
         }
         if (StringUtils.isEmpty(yzm)){
+            log.info("验证码不能为空");
             return ResultVO.error("验证码不能为空");
         }
         request.setCharacterEncoding("utf-8");
-        String session_vcode=(String) request.getSession().getAttribute("text");
+        String session_vcode = (String) request.getSession().getAttribute("text");
         System.out.println(session_vcode);
         //从session中获取真正的验证码
         if (!session_vcode.equals(yzm)){
+            log.info("验证码错误");
             return ResultVO.error("验证码错误");
         }
+        log.info("登录成功,username = {}",userDTO1.getUsername());
         return ResultVO.success("登录成功",userDTO1.getUsername());
     }
 
@@ -97,124 +105,124 @@ public class UserController {
         return resultVO;
     }
 
-    /**
-     * 注册
-     * @param userForm
-     * @return
-     */
-    @PostMapping("register")
-    public ResultVO register(@Valid UserForm userForm, BindingResult bindingResult){
+//    /**
+//     * 注册
+//     * @param userForm
+//     * @return
+//     */
+//    @PostMapping("register")
+//    public ResultVO register(@Valid UserForm userForm, BindingResult bindingResult){
+//
+//        if (null == userForm || StringUtils.isEmpty(userForm.getUsername())){
+//            return ResultVO.error("用户名不能为空");
+//        }
+//
+//        System.out.println(userForm);
+//
+//        ResultVO resultVOUsername = userService.getConfirmUsername(userForm.getUsername());
+//        if (resultVOUsername.getCode() == "1"){
+//            return resultVOUsername;
+//        }
+//        if (bindingResult.hasErrors()){
+//            String message = bindingResult.getFieldError().getDefaultMessage();
+//            return ResultVO.error(message);
+//        }
+//        /*if (StringUtils.isEmpty(userDTO.getPassword())){
+//            return ResultVO.error("密码不能为空");
+//        }
+//        if (StringUtils.isEmpty(userDTO.getRapassword())){
+//            return ResultVO.error("确认密码不能为空");
+//        }*/
+//        if (!userForm.getPassword().equals(userForm.getRapassword())){
+//            return ResultVO.error("两次密码不相同");
+//        }
+//        /*if (StringUtils.isEmpty(userDTO.getQuestion())){
+//            return ResultVO.error("问题不能为空");
+//        }
+//        if (StringUtils.isEmpty(userDTO.getAnswer())){
+//            return ResultVO.error("答案不能为空");
+//        }*/
+//        UserDTO userDTO = new UserDTO();
+//        BeanUtils.copyProperties(userForm,userDTO);
+//        ResultVO resultVO = userService.register(userDTO);
+//        return resultVO;
+//    }
 
-        if (null == userForm || StringUtils.isEmpty(userForm.getUsername())){
-            return ResultVO.error("用户名不能为空");
-        }
-
-        System.out.println(userForm);
-
-        ResultVO resultVOUsername = userService.getConfirmUsername(userForm.getUsername());
-        if (resultVOUsername.getCode() == "1"){
-            return resultVOUsername;
-        }
-        if (bindingResult.hasErrors()){
-            String message = bindingResult.getFieldError().getDefaultMessage();
-            return ResultVO.error(message);
-        }
-        /*if (StringUtils.isEmpty(userDTO.getPassword())){
-            return ResultVO.error("密码不能为空");
-        }
-        if (StringUtils.isEmpty(userDTO.getRapassword())){
-            return ResultVO.error("确认密码不能为空");
-        }*/
-        if (!userForm.getPassword().equals(userForm.getRapassword())){
-            return ResultVO.error("两次密码不相同");
-        }
-        /*if (StringUtils.isEmpty(userDTO.getQuestion())){
-            return ResultVO.error("问题不能为空");
-        }
-        if (StringUtils.isEmpty(userDTO.getAnswer())){
-            return ResultVO.error("答案不能为空");
-        }*/
-        UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(userForm,userDTO);
-        ResultVO resultVO = userService.register(userDTO);
-        return resultVO;
-    }
-
-    /**
-     * 忘记密码，确认用户名
-     * @param username
-     * @return
-     */
-    @PostMapping("username")
-    public ResultVO getUsername(String username){
-        System.out.println(username);
-        if (StringUtils.isEmpty(username)){
-            return ResultVO.error("用户名为空");
-        }
-        ResultVO resultVO = userService.getUsername(username);
-
-
-        return  resultVO;
-    }
-
-    /**
-     * 忘记密码，获取密保问题
-     * @param username
-     * @return
-     */
-    @PostMapping("getQuestion")
-    public ResultVO getQuestion(String username){
-        if (StringUtils.isEmpty(username)){
-            return ResultVO.error("用户为空");
-        }
-        ResultVO resultVO = userService.getQuestion(username);
-        System.out.println(resultVO);
-        return resultVO;
-    }
-
-    /**
-     * 忘记密码，根据用户名、答案查询用户
-     * @param username
-     * @param answer
-     * @return
-     */
-    @PostMapping("question")
-    public ResultVO question(String username,String answer){
-        if (StringUtils.isEmpty(username)){
-            return ResultVO.error("用户名为空");
-        }
-        if (StringUtils.isEmpty(answer)){
-            return ResultVO.error("答案不能为空");
-        }
-        ResultVO resultVO = userService.question(username,answer);
-        return resultVO;
-    }
-
-    /**
-     * 忘记密码，修改密码
-     * @param userDTO
-     * @return
-     */
-    @PostMapping("raPassword")
-    public ResultVO raPassword(UserDTO userDTO){
-        if (null == userDTO){
-            return ResultVO.error("系统错误");
-        }
-        if (StringUtils.isEmpty(userDTO.getUsername())){
-            return ResultVO.error("用户名为空");
-        }
-        if (StringUtils.isEmpty(userDTO.getPassword())){
-            return ResultVO.error("新秘密不能为空");
-        }
-        if (StringUtils.isEmpty(userDTO.getRapassword())){
-            return ResultVO.error("确认密码不能为空");
-        }
-        if (!userDTO.getPassword().equals(userDTO.getRapassword())){
-            return ResultVO.error("两次密码不相同");
-        }
-        ResultVO resultVO = userService.password(userDTO);
-        return resultVO;
-    }
+//    /**
+//     * 忘记密码，确认用户名
+//     * @param username
+//     * @return
+//     */
+//    @PostMapping("username")
+//    public ResultVO getUsername(String username){
+//        System.out.println(username);
+//        if (StringUtils.isEmpty(username)){
+//            return ResultVO.error("用户名为空");
+//        }
+//        ResultVO resultVO = userService.getUsername(username);
+//
+//
+//        return  resultVO;
+//    }
+//
+//    /**
+//     * 忘记密码，获取密保问题
+//     * @param username
+//     * @return
+//     */
+//    @PostMapping("getQuestion")
+//    public ResultVO getQuestion(String username){
+//        if (StringUtils.isEmpty(username)){
+//            return ResultVO.error("用户为空");
+//        }
+//        ResultVO resultVO = userService.getQuestion(username);
+//        System.out.println(resultVO);
+//        return resultVO;
+//    }
+//
+//    /**
+//     * 忘记密码，根据用户名、答案查询用户
+//     * @param username
+//     * @param answer
+//     * @return
+//     */
+//    @PostMapping("question")
+//    public ResultVO question(String username,String answer){
+//        if (StringUtils.isEmpty(username)){
+//            return ResultVO.error("用户名为空");
+//        }
+//        if (StringUtils.isEmpty(answer)){
+//            return ResultVO.error("答案不能为空");
+//        }
+//        ResultVO resultVO = userService.question(username,answer);
+//        return resultVO;
+//    }
+//
+//    /**
+//     * 忘记密码，修改密码
+//     * @param userDTO
+//     * @return
+//     */
+//    @PostMapping("raPassword")
+//    public ResultVO raPassword(UserDTO userDTO){
+//        if (null == userDTO){
+//            return ResultVO.error("系统错误");
+//        }
+//        if (StringUtils.isEmpty(userDTO.getUsername())){
+//            return ResultVO.error("用户名为空");
+//        }
+//        if (StringUtils.isEmpty(userDTO.getPassword())){
+//            return ResultVO.error("新秘密不能为空");
+//        }
+//        if (StringUtils.isEmpty(userDTO.getRapassword())){
+//            return ResultVO.error("确认密码不能为空");
+//        }
+//        if (!userDTO.getPassword().equals(userDTO.getRapassword())){
+//            return ResultVO.error("两次密码不相同");
+//        }
+//        ResultVO resultVO = userService.password(userDTO);
+//        return resultVO;
+//    }
 
     /**
      * 图片验证码
@@ -250,15 +258,28 @@ public class UserController {
     }
 
     /**
-     * 冻结/解冻用户
+     * 更新用户状态
      * @param userDTO
      * @return
      */
     @PostMapping("updateUserStatus")
     public ResultVO updateUserStatus(UserDTO userDTO){
-        log.info("【冻结/解冻用户开始，请求参数】 = {}",JSON.toJSONString(userDTO));
+        log.info("【更新用户状态开始，请求参数】 = {}",JSON.toJSONString(userDTO));
         ResultVO resultVO = userService.updateUserStatus(userDTO);
-        log.info("【冻结解冻用户结束】");
+        log.info("【更新用户状态结束】");
         return resultVO;
     }
+
+    /**
+     * 查询每月用户数
+     * @return
+     */
+    @PostMapping("queryUserByMonth")
+    public ResultVO queryUserByMonth(){
+       log.info("【查询每月用户数开始】");
+       List<UserDTO> userDTOList = userService.queryUserByMonth();
+       log.info("【查询每月用户数，查询结果】 = {}",JSON.toJSONString(userDTOList));
+       return ResultVO.success(userDTOList);
+    }
 }
+

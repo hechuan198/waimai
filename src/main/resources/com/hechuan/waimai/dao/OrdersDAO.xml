@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.hechuan.waimai.dao.OrdersDAO">
+	<resultMap type="com.hechuan.waimai.entity.Orders" id="ordersMap">
+		<id property="ordersid" column="id" />
+		<result property="ordercode" column="order_no" />
+		<result property="usersid" column="user_id" />
+		<result property="total" column="payment" />
+		<result property="status" column="status" />
+		<result property="addtime" column="create_time" />
+		<result property="paymentTime" column="payment_time" />
+		<result property="sendTime" column="send_time" />
+		<result property="endtime" column="end_time" />
+		<result property="username" column="username" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertOrders" parameterType="com.hechuan.waimai.entity.Orders">
+		insert into w_order(id, order_no , user_id , payment , status , create_time
+		) values(#{ordersid} , #{ordercode} , #{usersid} , #{total} ,
+		#{status} , #{addtime} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateOrders" parameterType="com.hechuan.waimai.entity.Orders">
+		update w_order set
+		<if test="status == '已付款'">
+			status=#{status} , payment_time=now()
+		</if>
+		<if test="status == '已取消'">
+			status=#{status} , close_time = now()
+		</if>
+		 where
+		order_no=#{ordercode}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteOrders" parameterType="String">
+		delete from w_order where id = #{ordersid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllOrders" resultMap="ordersMap">
+		select a.* , b.username from w_order a , w_user b where 1=1 and a.user_id =
+		b.id order by id desc
+	</select>
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getOrdersById" parameterType="String" resultMap="ordersMap">
+		select a.* , b.username from w_order a , w_user b where 1=1 and
+		a.user_id = b.id and order_no=#{ordersid} order by id desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getOrdersByCond" parameterType="com.hechuan.waimai.entity.Orders" resultMap="ordersMap">
+		select a.* , b.username from w_order a , w_user b where 1=1 and
+		a.user_id = b.id
+		<if test="ordercode != null and '' != ordercode">
+			and a.order_no = #{ordercode}
+		</if>
+		<if test="usersid != null and '' != usersid">
+			and a.user_id = #{usersid}
+		</if>
+		<if test="total != null and '' != total">
+			and a.payment = #{total}
+		</if>
+		<if test="status != null and '' != status">
+			and a.status = #{status}
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.create_time = #{addtime}
+		</if>
+		order by create_time desc
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getOrdersByLike" parameterType="com.hechuan.waimai.entity.Orders" resultMap="ordersMap">
+		select a.* , b.username from w_order a , w_user b where 1=1 and
+		a.user_id = b.id
+		<if test="ordercode != null and '' != ordercode">
+			and a.order_no like CONCAT('%', CONCAT(#{ordercode}, '%'))
+		</if>
+		<if test="usersid != null and '' != usersid">
+			and a.user_id like CONCAT('%', CONCAT(#{usersid}, '%'))
+		</if>
+		<if test="total != null and '' != total">
+			and a.payment like CONCAT('%', CONCAT(#{total}, '%'))
+		</if>
+		<if test="status != null and '' != status">
+			and a.status like CONCAT('%', CONCAT(#{status}, '%'))
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.create_time like CONCAT('%', CONCAT(#{addtime}, '%'))
+		</if>
+	</select>
+</mapper>
+
+

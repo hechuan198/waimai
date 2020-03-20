@@ -9,11 +9,11 @@ public class Constant {
      */
     public interface OrderStatus{
         // 已支付
-        Integer PAY = 2;
+        String PAY = "已付款";
         // 处理中
-        Integer HANDLE = 3;
+        String HANDLE = "处理中";
         // 已发货
-        Integer SHIPPED = 4;
+        String SHIPPED = "已发货";
 
 
     }

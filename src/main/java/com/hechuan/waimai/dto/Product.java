@@ -1,6 +1,7 @@
 package com.hechuan.waimai.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hechuan.waimai.util.VeDate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,9 +13,9 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 public class Product {
-    private Integer id;
+    private String id = "F" + VeDate.getStringId();
 
-    private Integer categoryId;
+    private String categoryId;
 
     private String name;
 
@@ -25,6 +26,10 @@ public class Product {
     private String detail;
 
     private BigDecimal price;
+
+    private String sellnum;
+
+    private String hits;
 
     private Integer status;
 //    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")

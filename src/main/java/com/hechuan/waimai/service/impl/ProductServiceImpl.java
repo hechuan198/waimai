@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -74,5 +76,14 @@ public class ProductServiceImpl implements ProductService {
         Product product = productMapper.queryProduct(productRequest);
 
         return product;
+    }
+
+    /**
+     * 查询热销商品
+     * @return
+     */
+    @Override
+    public List<Product> queryHotProductList() {
+        return productMapper.queryHotProductList();
     }
 }

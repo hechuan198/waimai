@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.hechuan.waimai.dao.CateDAO">
+	<resultMap type="com.hechuan.waimai.entity.Cate" id="cateMap">
+		<id property="cateid" column="id" />
+		<result property="catename" column="name" />
+		<result property="addtime" column="create_time" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertCate" parameterType="com.hechuan.waimai.entity.Cate">
+		insert into w_category(id ,
+		name ,  create_time ) values(#{cateid} ,
+		#{catename} ,
+		#{addtime} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateCate" parameterType="com.hechuan.waimai.entity.Cate">
+		update w_category set
+		name=#{catename} ,  create_time=#{addtime}
+		where
+		id=#{cateid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteCate" parameterType="String">
+		delete from w_category where
+		id = #{cateid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllCate" resultMap="cateMap">
+		select id, name, create_time from w_category where
+		1=1 order by id desc
+	</select>
+	<select id="getCateFront" resultMap="cateMap">
+		select a.* from w_category a order
+		by id desc limit 3
+	</select>
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getCateById" parameterType="String" resultMap="cateMap">
+		select a.* from w_category a where 1=1 and id=#{cateid} order by id
+		desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getCateByCond" parameterType="com.hechuan.waimai.entity.Cate" resultMap="cateMap">
+		select a.* from w_category a where 1=1
+		<if test="catename != null and '' != catename">
+			and a.name = #{catename}
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.create_time = #{addtime}
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getCateByLike" parameterType="com.hechuan.waimai.entity.Cate" resultMap="cateMap">
+		select a.* from w_category a where 1=1
+		<if test="catename != null and '' != catename">
+			and a.name like CONCAT('%', CONCAT(#{catename}, '%'))
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.create_time like CONCAT('%', CONCAT(#{addtime}, '%'))
+		</if>
+	</select>
+</mapper>
+
+

@@ -18,7 +18,7 @@
   </resultMap>-->
   <sql id="Base_Column_List" >
     id, user_id, order_no, product_id, product_name, product_image, current_unit_price, 
-    quantity, total_price,date_format(create_time, '%Y-%m-%d %H:%i:%s') create_time,date_format(update_time, '%Y-%m-%d %H:%i:%s') update_time
+    quantity,receiver_address, total_price,date_format(create_time, '%Y-%m-%d %H:%i:%s') create_time,date_format(update_time, '%Y-%m-%d %H:%i:%s') update_time
   </sql>
   <select id="selectByPrimaryKey" resultType="com.hechuan.waimai.dto.OrderItem" parameterType="java.lang.Integer" >
     select 
@@ -165,6 +165,6 @@
   </update>
 
   <select id="queryOrderDetailList" parameterType="com.hechuan.waimai.dto.OrderItem" resultType="com.hechuan.waimai.dto.OrderItem">
-    select <include refid="Base_Column_List"></include> from w_order_item where order_no = #{orderNo}
+    select <include refid="Base_Column_List"></include> from w_order_item where order_no = #{orderNo} order by create_time desc
   </select>
 </mapper>

@@ -10,13 +10,13 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 public class OrderItem {
-    private Integer id;
+    private String id;
 
-    private Integer userId;
+    private String userId;
 
-    private Long orderNo;
+    private String orderNo;
 
-    private Integer productId;
+    private String productId;
 
     private String productName;
 
@@ -27,6 +27,8 @@ public class OrderItem {
     private Integer quantity;
 
     private BigDecimal totalPrice;
+
+    private String receiverAddress;
 
     private String createTime;
 
