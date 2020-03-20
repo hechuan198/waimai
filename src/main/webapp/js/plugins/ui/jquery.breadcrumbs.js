@@ -40,6 +40,7 @@
             		var initWidth = $(this).children('A').attr('init-width');
             		$(this).children('A').animate({width: initWidth}, 'normal');
             	}
+
             });
             
             element.children('LI').mouseleave(function(){
