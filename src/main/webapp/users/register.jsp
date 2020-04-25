@@ -10,8 +10,8 @@
 <head>
 <base href="<%=basePath%>" />
 <title>${title }</title>
-<script type="text/javascript" src="<%=basePath%>js/jquery.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="<%=basePath%>js/userjs/users.js" charset="utf-8"></script>
+<%--<script type="text/javascript" src="<%=basePath%>js/jquery.min.js" charset="utf-8"></script>--%>
+<%--<script type="text/javascript" src="<%=basePath%>js/userjs/users.js" charset="utf-8"></script>--%>
 <script type="text/javascript" src="<%=basePath%>My97DatePicker/WdatePicker.js" charset="utf-8"></script>
 
 </head>
@@ -74,8 +74,8 @@
 																							  class="inputBg" id="answer" /></td>
 									</tr>
 									<tr>
-										<td colspan="2" align="center" bgcolor="#FFFFFF"><input type="submit" id="sub" class="bnt_blue_1"
-											style="border: none;" value="确认注册" /></td>
+										<td colspan="2" align="center" bgcolor="#FFFFFF">
+											<input type="submit" id="sub" class="bnt_blue_1" style="border: none;" value="确认注册" /></td>
 									</tr>
 								</table>
 							</form>

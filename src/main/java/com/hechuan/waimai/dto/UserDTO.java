@@ -1,5 +1,6 @@
 package com.hechuan.waimai.dto;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.hechuan.waimai.util.VeDate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class UserDTO {
     /**
      * 密码
      */
+
     private String password;
     /**
      * 确认密码
@@ -60,11 +62,13 @@ public class UserDTO {
     /**
      * 月份
      */
+    @ExcelProperty(value = "月份",index = 0)
     private String months;
 
     /**
      * 用户数量
      */
+    @ExcelProperty(value = "用户数量",index = 1)
     private Integer userCount;
 
 }

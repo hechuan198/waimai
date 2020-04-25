@@ -1,10 +1,9 @@
 package com.hechuan.waimai.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.hechuan.waimai.dto.User;
-import com.hechuan.waimai.dto.UserDTO;
-import com.hechuan.waimai.dto.UserForm;
+import com.hechuan.waimai.dto.*;
 import com.hechuan.waimai.service.UserService;
 import com.hechuan.waimai.service.impl.ProductServiceImpl;
 import com.hechuan.waimai.util.ImageVerificationCode;
@@ -13,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -280,6 +284,31 @@ public class UserController {
        List<UserDTO> userDTOList = userService.queryUserByMonth();
        log.info("【查询每月用户数，查询结果】 = {}",JSON.toJSONString(userDTOList));
        return ResultVO.success(userDTOList);
+    }
+
+
+    @RequestMapping(value = "/getUserExport")
+    public ResponseEntity<byte[]> getUserExport() {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+        String date = sdf.format(new Date());
+        String fileName = "User" + date + ".xlsx";
+        responseHeaders.set("Content-Disposition", "attachment; filename=" + fileName);
+        List<UserDTO> userDTOList = userService.queryUserByMonth();
+
+        //转换数据
+        List<UserReportDTO> userReportDTOS = new ArrayList();
+        for (UserDTO userDTO : userDTOList) {
+            UserReportDTO userReportDTO = new UserReportDTO();
+            BeanUtils.copyProperties(userDTO,userReportDTO);
+            userReportDTOS.add(userReportDTO);
+        }
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        EasyExcel.write(outputStream, UserReportDTO.class).sheet("每月用户数").doWrite(userReportDTOS);
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(outputStream.toByteArray());
     }
 }
 

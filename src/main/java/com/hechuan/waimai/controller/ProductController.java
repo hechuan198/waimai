@@ -1,11 +1,9 @@
 package com.hechuan.waimai.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.hechuan.waimai.dto.Category;
-import com.hechuan.waimai.dto.Product;
-import com.hechuan.waimai.dto.ProductListRequest;
-import com.hechuan.waimai.dto.ProductRequest;
+import com.hechuan.waimai.dto.*;
 import com.hechuan.waimai.service.CategoryService;
 import com.hechuan.waimai.service.ProductService;
 import com.hechuan.waimai.service.impl.ProductServiceImpl;
@@ -14,15 +12,21 @@ import com.hechuan.waimai.util.ResultVO;
 import com.hechuan.waimai.util.VeDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -120,13 +124,11 @@ public class ProductController {
      */
     @PostMapping("upload")
     public ResultVO upload(@RequestParam("file") MultipartFile file , HttpServletRequest request) {
-        System.out.println(file);
-//        log.info("【图片信息】 = {}", JSON.toJSONString(file));
         String pathString = null;
         String filename = null;
         if (file != null) {
-            filename = "upfiles/"+ new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + file.getOriginalFilename();
-            pathString = "D:\\work_space\\projectWorkSpace\\waimai\\src\\main\\webapp\\" + filename;
+            filename = "/"+ new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + file.getOriginalFilename();
+            pathString = request.getServletContext().getRealPath("/upfiles") + filename;
 
         }
 
@@ -160,5 +162,29 @@ public class ProductController {
         List<Product> productList = productService.queryHotProductList();
         log.info("【查询热销商品结果，productList】 = {}",JSON.toJSONString(productList));
         return ResultVO.success(productList);
+    }
+
+    @RequestMapping(value = "/getProductExport")
+    public ResponseEntity<byte[]> getProductExport() {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+        String date = sdf.format(new Date());
+        String fileName = "Product" + date + ".xlsx";
+        responseHeaders.set("Content-Disposition", "attachment; filename=" + fileName);
+        List<Product> productList = productService.queryHotProductList();
+        //转换数据
+        List<ProductReportDTO> productReportDTOS = new ArrayList();
+        for (Product product : productList) {
+            ProductReportDTO productReportDTO = new ProductReportDTO();
+            BeanUtils.copyProperties(product,productReportDTO);
+            productReportDTOS.add(productReportDTO);
+        }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        EasyExcel.write(outputStream, ProductReportDTO.class).sheet("热销商品").doWrite(productReportDTOS);
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(outputStream.toByteArray());
     }
 }

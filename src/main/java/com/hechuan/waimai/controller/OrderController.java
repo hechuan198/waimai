@@ -1,5 +1,6 @@
 package com.hechuan.waimai.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.hechuan.waimai.dto.*;
@@ -9,9 +10,17 @@ import com.hechuan.waimai.service.impl.ProductServiceImpl;
 import com.hechuan.waimai.util.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -88,6 +97,30 @@ public class OrderController {
         List<OrderCountDTO> orderCountDTOList = orderService.queryOrderByMonth();
         log.info("【查询每月订单数，查询结果】 = {}",JSON.toJSONString(orderCountDTOList));
         return ResultVO.success(orderCountDTOList);
+    }
+
+    @RequestMapping(value = "/getOrderExport")
+    public ResponseEntity<byte[]> getOrderExport() {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+        String date = sdf.format(new Date());
+        String fileName = "Order" + date + ".xlsx";
+        responseHeaders.set("Content-Disposition", "attachment; filename=" + fileName);
+        List<OrderCountDTO> orderCountDTOList = orderService.queryOrderByMonth();
+        //转换数据
+        List<OrderReportDTO> orderReportDTOS = new ArrayList();
+        for (OrderCountDTO orderCountDTO : orderCountDTOList) {
+            OrderReportDTO orderReportDTO = new OrderReportDTO();
+            BeanUtils.copyProperties(orderCountDTO,orderReportDTO);
+            orderReportDTOS.add(orderReportDTO);
+        }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        EasyExcel.write(outputStream, OrderReportDTO.class).sheet("每月订单数").doWrite(orderReportDTOS);
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(outputStream.toByteArray());
     }
 
 }
