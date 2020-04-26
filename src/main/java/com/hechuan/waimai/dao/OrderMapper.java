@@ -38,4 +38,6 @@ public interface OrderMapper {
      * @return
      */
     List<OrderCountDTO> queryOrderByMonth();
+
+    void autoCancelOrder();
 }

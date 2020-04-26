@@ -150,6 +150,10 @@
       update_time = #{updateTime}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <update id="autoCancelOrder">
+        update w_order set status='已取消',update_time = now()
+        where status = '未付款' and DATE_FORMAT(ADDDATE(create_time, INTERVAL 5 MINUTE),'%Y-%m-%d %H:%i:%s') <![CDATA[ <= ]]> now()
+    </update>
 
     <select id="queryOrderList" resultType="com.hechuan.waimai.dto.Order" parameterType="com.hechuan.waimai.dto.Order">
         select
