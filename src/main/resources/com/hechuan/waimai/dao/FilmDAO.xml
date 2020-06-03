@@ -45,13 +45,13 @@
 	<select id="getAllFilm" resultMap="filmMap">
 		select a.* , b.name catename from
 		w_product a , w_category b where 1=1 and a.status = 1 and a.category_id =
-		b.id order by a.id desc
+		b.id order by a.hits * 1 desc
 	</select>
 
 	<select id="getFilmByNews" resultMap="filmMap">
 		select a.* , b.name catename
 		from w_product a , w_category b where a.category_id = b.id and a.status = 1
-		order by a.id desc
+		order by a.sellnum * 1 desc
 		limit 5
 	</select>
 
@@ -59,8 +59,7 @@
 		select a.* , b.name catename
 		from
 		w_product a , w_category b where a.category_id = b.id and a.status = 1
-		order
-		by hits desc
+		order by a.hits * 1 desc
 		limit 5
 	</select>
 
@@ -68,14 +67,14 @@
 		select a.* , b.name catename from w_product a , w_category b
 		where a.category_id = b.id and a.status = 1
 		and a.category_id=#{cateid} order by
-		hits desc limit
+		a.hits * 1 desc limit
 		5
 	</select>
 
 	<!-- 按主键查询 DAO通过id调用此配置 -->
 	<select id="getFilmById" parameterType="String" resultMap="filmMap">
 		select a.* , b.name catename from w_product a , w_category b where 1=1 and a.status = 1 and a.category_id =
-		b.id and a.id=#{filmid} order by a.id desc
+		b.id and a.id=#{filmid} order by a.sellnum * 1 desc
 	</select>
 	<!-- 按条件精确查询 DAO通过id调用此配置 -->
 	<select id="getFilmByCond" parameterType="com.hechuan.waimai.entity.Film" resultMap="filmMap">
@@ -106,11 +105,12 @@
 			and a.hits = #{hits}
 		</if>
 		<if test="sellnum != null and '' != sellnum">
-			and a.sellnum = #{sellnum}
+			and a.sellnum != #{sellnum}
 		</if>
 		<if test="contents != null and '' != contents">
 			and a.detail = #{contents}
 		</if>
+		order by a.sellnum * 1 desc
 	</select>
 	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
 	<select id="getFilmByLike" parameterType="com.hechuan.waimai.entity.Film" resultMap="filmMap">
@@ -147,6 +147,7 @@
 		<if test="contents != null and '' != contents">
 			and a.detail like CONCAT('%', CONCAT(#{contents}, '%'))
 		</if>
+		order by a.sellnum * 1 desc
 	</select>
 </mapper>
 

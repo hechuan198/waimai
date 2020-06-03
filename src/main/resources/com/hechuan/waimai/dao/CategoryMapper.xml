@@ -101,7 +101,7 @@
     </set>
     where 1=1
     <if test="id != null">
-      and id = #{id}
+      and id = #{id,jdbcType=VARCHAR}
     </if>
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hechuan.waimai.dto.Category" >

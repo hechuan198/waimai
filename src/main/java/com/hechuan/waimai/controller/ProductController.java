@@ -54,6 +54,13 @@ public class ProductController {
         log.info("【请求参数】 = {}", productListRequest);
 
         PageInfo<Product> productList = productService.queryProductList(productListRequest);
+        for (Product product : productList.getList()) {
+            Category categoryRequest = new Category();
+            categoryRequest.setId(product.getCategoryId());
+            Category category = categoryService.queryCategoryByName(categoryRequest);
+            product.setCategory(category.getName());
+        }
+
         log.info("【分页查询商品结果，productList】 = {}",JSON.toJSONString(productList));
         return ResultVO.success(productList);
     }
@@ -96,7 +103,12 @@ public class ProductController {
     public ResultVO updataProduct(ProductRequest productRequest){
 
         log.info("【修改商品，请求参数】 = {}",JSON.toJSONString(productRequest));
-
+        Category categoryRequest = new Category();
+        categoryRequest.setName(productRequest.getCategory());
+        categoryRequest.setId(null);
+        Category category = categoryService.queryCategoryByName(categoryRequest);
+        log.info("【查询分类结果】 = {}", JSON.toJSONString(category));
+        productRequest.setCategoryId(category.getId());
         productService.updataProduct(productRequest);
         log.info("【修改商品，完成】");
         return ResultVO.success("商品改变状态成功");
@@ -112,6 +124,10 @@ public class ProductController {
 
         log.info("【查询单个商品，请求参数】 = {}", JSON.toJSONString(productRequest));
         Product product = productService.queryProduct(productRequest);
+        Category categoryRequest = new Category();
+        categoryRequest.setId(product.getCategoryId());
+        Category category = categoryService.queryCategoryByName(categoryRequest);
+        product.setCategory(category.getName());
         log.info("【查询单个商品，返回结果】 = {}", JSON.toJSONString(product));
         return ResultVO.success(product);
     }
@@ -147,7 +163,7 @@ public class ProductController {
         }
 
         log.info("【上传成功】");
-        return ResultVO.success("",filename);
+        return ResultVO.success("","upfiles"+filename);
     }
 
     /**

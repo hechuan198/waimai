@@ -39,4 +39,6 @@ public class Product {
 //    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private String updateTime;
 
+    private String category;
+
 }

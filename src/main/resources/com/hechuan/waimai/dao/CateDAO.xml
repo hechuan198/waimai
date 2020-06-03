@@ -30,16 +30,15 @@
 	<!-- 查询全部信息 DAO通过id调用此配置 -->
 	<select id="getAllCate" resultMap="cateMap">
 		select id, name, create_time from w_category where
-		1=1 order by id desc
+		1=1 order by sort_order desc
 	</select>
 	<select id="getCateFront" resultMap="cateMap">
 		select a.* from w_category a order
-		by id desc limit 3
+		by sort_order desc limit 3
 	</select>
 	<!-- 按主键查询 DAO通过id调用此配置 -->
 	<select id="getCateById" parameterType="String" resultMap="cateMap">
-		select a.* from w_category a where 1=1 and id=#{cateid} order by id
-		desc
+		select a.* from w_category a where 1=1 and id=#{cateid} order by sort_order desc
 	</select>
 	<!-- 按条件精确查询 DAO通过id调用此配置 -->
 	<select id="getCateByCond" parameterType="com.hechuan.waimai.entity.Cate" resultMap="cateMap">

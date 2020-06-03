@@ -12,6 +12,7 @@ import com.hechuan.waimai.dto.UserForm;
 import com.hechuan.waimai.entity.*;
 import com.hechuan.waimai.service.*;
 import com.hechuan.waimai.util.AlipayConfig;
+import com.hechuan.waimai.util.MD5;
 import com.hechuan.waimai.util.ResultVO;
 import com.hechuan.waimai.util.VeDate;
 import org.springframework.beans.BeanUtils;
@@ -99,6 +100,8 @@ public class IndexAction extends BaseAction {
         this.front();
         String username = this.getRequest().getParameter("username");
         String password = this.getRequest().getParameter("password");
+        password = MD5.md5(password);
+        System.out.println(password);
         Users u = new Users();
         u.setUsername(username);
         List<Users> usersList = this.usersService.getUsersByCond(u);
@@ -158,6 +161,7 @@ public class IndexAction extends BaseAction {
         }
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(userForm, userDTO);
+        userDTO.setPassword(MD5.md5(userDTO.getPassword()));
         userService.register(userDTO);
         this.getSession().setAttribute("message", "注册成功");
         return "redirect:/index/preLogin.action";
@@ -193,6 +197,7 @@ public class IndexAction extends BaseAction {
         }
         String userid = (String) this.getSession().getAttribute("userid");
         String password = this.getRequest().getParameter("password");
+        password = MD5.md5(password);
         String newpassword = this.getRequest().getParameter("newpassword");
         String repassword = this.getRequest().getParameter("repassword");
         Users users = this.usersService.getUsersById(userid);
@@ -209,7 +214,7 @@ public class IndexAction extends BaseAction {
             this.getSession().setAttribute("message", "两次密码不一致");
             return "redirect:/index/prePwd.action";
         }
-        users.setPassword(repassword);
+        users.setPassword(MD5.md5(repassword));
         this.usersService.updateUsers(users);
         this.getSession().setAttribute("message", "密码修改成功");
         return "redirect:/index/prePwd.action";
@@ -223,7 +228,7 @@ public class IndexAction extends BaseAction {
         }
         return "users/usercenter";
     }
-
+    // 获取用户信息
     @RequestMapping("userinfo.action")
     public String userinfo() {
         this.front();
@@ -296,7 +301,7 @@ public class IndexAction extends BaseAction {
         }
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername((String) getSession().getAttribute("forgetUsername"));
-        userDTO.setPassword(newpassword);
+        userDTO.setPassword(MD5.md5(newpassword));
         ResultVO resultVO = userService.password(userDTO);
         getSession().setAttribute("message", resultVO.getMessage());
         return "redirect:/index/preLogin.action";
@@ -380,7 +385,7 @@ public class IndexAction extends BaseAction {
         return "redirect:/index/showOrders.action";
     }
 
-    // 准备结算
+    // 准备生成订单
     @RequestMapping("preCheckout.action")
     public String preCheckout() {
         this.front();
@@ -403,7 +408,7 @@ public class IndexAction extends BaseAction {
     }
 
 
-    // 结算
+    // 生成订单
     @RequestMapping("checkout.action")
     public String checkout(String id) {
         this.front();
@@ -419,13 +424,11 @@ public class IndexAction extends BaseAction {
             this.getRequest().setAttribute("message", "请选购商品");
             return "redirect:/index/cart.action";
         } else {
-            // 获取一个1200-9999的随机数 防止同时提交
             String ordercode = "PD" + VeDate.getStringDatex();
             double total = 0;
             Address address = addressService.queryAddress(id);
             for (Cart cart : cartList) {
                 Details details = new Details();
-//				details.setDetailsid(VeDate.getStringDatex() + (Math.random() * 9 + 1) * 1200);
                 details.setFilmid(cart.getFilmid());
                 details.setUserId(userid);
                 details.setNum(cart.getNum());
@@ -840,6 +843,7 @@ public class IndexAction extends BaseAction {
         this.front();
         Film goods = new Film();
         goods.setRecommend(1);
+        goods.setSellnum("0");
         List<Film> flimList = new ArrayList<Film>();
         List<Film> tempList = this.filmService.getFilmByCond(goods);
         int pageNumber = tempList.size();

@@ -7,6 +7,7 @@ import com.hechuan.waimai.dto.*;
 import com.hechuan.waimai.service.UserService;
 import com.hechuan.waimai.service.impl.ProductServiceImpl;
 import com.hechuan.waimai.util.ImageVerificationCode;
+import com.hechuan.waimai.util.MD5;
 import com.hechuan.waimai.util.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,9 +68,10 @@ public class UserController {
 
         String username = userDTO.getUsername();
         Integer role = userDTO.getRole();
-        String password = userDTO.getPassword();
+        String password = MD5.md5(userDTO.getPassword());
 
         UserDTO userDTO1 = userService.getUserByUsername(username,role);
+        log.info("{}",userDTO1);
         if(null == userDTO1){
             log.info("用户不存在");
             return ResultVO.error("用户不存在");

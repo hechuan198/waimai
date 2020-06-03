@@ -188,6 +188,6 @@
     </select>
 
     <select id="queryUserByMonth" resultType="com.hechuan.waimai.dto.UserDTO">
-      select date_format(create_time,'%y年%m月') months , count(*) userCount from w_user where status = 1 group by months order by months asc
+      select date_format(create_time,'%y年%m月') months , count(*) userCount from w_user where status = 1 and role = 2 group by months order by months asc
     </select>
 </mapper>
